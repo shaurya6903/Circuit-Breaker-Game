@@ -1,1 +1,1294 @@
-!function () { const e = document.getElementById("canvas"), t = e.getContext("2d"); let o, l, a, n, r, i, s, c = "cover", f = "standard", d = [], h = null, g = 0, u = 0, y = [], m = [], p = 0, S = 0, b = 0, v = 0, M = 0, k = "#00ff00", x = -80, T = -80, w = 0, C = 0, P = [], A = [], E = null, W = "bolted", B = 0, R = 0, Y = !1, I = null, L = 1, O = 0, F = !1; const G = { red: { fill: "#FF1744", stroke: "#cc1036", highlight: "#ff5c7a", name: "Red" }, blue: { fill: "#2979FF", stroke: "#1a5ecc", highlight: "#6da3ff", name: "Blue" }, yellow: { fill: "#FFD600", stroke: "#ccab00", highlight: "#ffe44d", name: "Yellow" }, pink: { fill: "#FF4081", stroke: "#cc3367", highlight: "#ff79a8", name: "Pink" }, orange: { fill: "#FF6D00", stroke: "#cc5700", highlight: "#ff9a4d", name: "Orange" }, green: { fill: "#00E676", stroke: "#00b85e", highlight: "#4dff9e", name: "Green" } }, X = ["red", "blue", "yellow", "pink"], z = ["red", "blue", "yellow", "pink", "orange", "green"]; function D() { a = window.devicePixelRatio || 1, o = window.innerWidth, l = window.innerHeight, e.width = o * a, e.height = l * a, e.style.width = o + "px", e.style.height = l + "px", t.setTransform(a, 0, 0, a, 0, 0), function () { const e = Math.min(.92 * o, 600), t = Math.min(.78 * l, 500); i = e, s = t, n = (o - i) / 2, r = (l - s) / 2 - 10 }(), q() } function q() { const e = 20, t = 14; A = [{ x: n + e + t, y: r + e + t, rotation: 0, unscrewed: !1, unscrewProgress: 0, wobble: 0 }, { x: n + i - e - t, y: r + e + t, rotation: 0, unscrewed: !1, unscrewProgress: 0, wobble: 0 }, { x: n + e + t, y: r + s - e - t, rotation: 0, unscrewed: !1, unscrewProgress: 0, wobble: 0 }, { x: n + i - e - t, y: r + s - e - t, rotation: 0, unscrewed: !1, unscrewProgress: 0, wobble: 0 }] } function $(e) { const t = e.slice(); for (let e = t.length - 1; e > 0; e--) { const o = Math.floor(Math.random() * (e + 1));[t[e], t[o]] = [t[o], t[e]] } return t } function H(e, t) { for (let o = 0; o < 3; o++)y.push({ x: e, y: t, life: 1, segments: j(e, t, 20 + 15 * Math.random()) }); y.push({ x: e, y: t, life: 1, isBloom: !0 }); for (let o = 0; o < 12; o++) { const o = Math.random() * Math.PI * 2, l = 1 + 3 * Math.random(); m.push({ x: e, y: t, vx: Math.cos(o) * l, vy: Math.sin(o) * l, life: 1, size: 1 + 2 * Math.random() }) } } function j(e, t, o) { const l = []; let a = e, n = t; const r = Math.random() * Math.PI * 2, i = 4 + Math.floor(3 * Math.random()); for (let e = 0; e < i; e++) { const e = a + Math.cos(r + 2 * (Math.random() - .5)) * (o / i), t = n + Math.sin(r + 2 * (Math.random() - .5)) * (o / i); l.push({ x1: a, y1: n, x2: e, y2: t }), a = e, n = t } return l } function N(e) { b = Math.max(b, e) } function K(e, o, l, a, n) { t.beginPath(), t.moveTo(e + n, o), t.lineTo(e + l - n, o), t.arcTo(e + l, o, e + l, o + n, n), t.lineTo(e + l, o + a - n), t.arcTo(e + l, o + a, e + l - n, o + a, n), t.lineTo(e + n, o + a), t.arcTo(e, o + a, e, o + a - n, n), t.lineTo(e, o + n), t.arcTo(e, o, e + n, o, n), t.closePath() } function U(e, o, l) { const a = t.createRadialGradient(e - .3 * l, o - .3 * l, 0, e, o, l); a.addColorStop(0, "#6a6a6a"), a.addColorStop(.5, "#4a4a4a"), a.addColorStop(1, "#2a2a2a"), t.fillStyle = a, t.beginPath(), t.arc(e, o, l, 0, 2 * Math.PI), t.fill(), t.strokeStyle = "#222", t.lineWidth = .5, t.stroke() } function V() { const e = t.createRadialGradient(o / 2, l / 2, 50, o / 2, l / 2, .7 * Math.max(o, l)); e.addColorStop(0, "#1a2a30"), e.addColorStop(.5, "#0e1a1f"), e.addColorStop(1, "#060a0d"), t.fillStyle = e, t.fillRect(0, 0, o, l), t.strokeStyle = "rgba(30, 60, 70, 0.15)", t.lineWidth = 1; for (let e = 0; e < o; e += 40)t.beginPath(), t.moveTo(e, 0), t.lineTo(e, l), t.stroke(); for (let e = 0; e < l; e += 40)t.beginPath(), t.moveTo(0, e), t.lineTo(o, e), t.stroke() } function Z(e, o, l, a, n, r, i) { const s = G[n], c = (e + l) / 2, f = 20 + .15 * Math.abs(a - o); t.save(), t.globalAlpha = r || 1, t.save(), t.shadowColor = "rgba(0,0,0,0.4)", t.shadowBlur = 6, t.shadowOffsetY = 3, t.strokeStyle = s.stroke, t.lineWidth = i || 7, t.lineCap = "round", t.beginPath(), t.moveTo(e, o), t.bezierCurveTo(c, o + f, c, a + f, l, a), t.stroke(), t.restore(), t.strokeStyle = s.fill, t.lineWidth = i || 7, t.lineCap = "round", t.beginPath(), t.moveTo(e, o), t.bezierCurveTo(c, o + f, c, a + f, l, a), t.stroke(), t.strokeStyle = s.highlight, t.lineWidth = 2, t.globalAlpha = .5 * (r || 1), t.beginPath(), t.moveTo(e, o - 1.5), t.bezierCurveTo(c, o + f - 2, c, a + f - 2, l, a - 1.5), t.stroke(), t.restore() } function J() { y.forEach(e => { if (e.isBloom) { t.save(); const o = t.createRadialGradient(e.x, e.y, 0, e.x, e.y, 30 * e.life); o.addColorStop(0, `rgba(180, 220, 255, ${.8 * e.life})`), o.addColorStop(.5, `rgba(100, 170, 255, ${.3 * e.life})`), o.addColorStop(1, "rgba(100, 170, 255, 0)"), t.fillStyle = o, t.beginPath(), t.arc(e.x, e.y, 30, 0, 2 * Math.PI), t.fill(), t.restore() } else t.save(), t.strokeStyle = `rgba(200, 230, 255, ${e.life})`, t.lineWidth = 2 * e.life, t.lineCap = "round", t.shadowColor = "#aaddff", t.shadowBlur = 6, e.segments.forEach(e => { t.beginPath(), t.moveTo(e.x1, e.y1), t.lineTo(e.x2, e.y2), t.stroke() }), t.restore() }), m.forEach(e => { t.save(), t.globalAlpha = e.life, t.fillStyle = e.isMetal ? "#c0a060" : "#ddeeff", t.shadowColor = e.isMetal ? "#aa8844" : "#aaddff", t.shadowBlur = 4, t.beginPath(), t.arc(e.x, e.y, e.size * e.life, 0, 2 * Math.PI), t.fill(), t.restore() }) } function Q(e) { if (V(), t.save(), t.translate(p, S), function () { t.save(), t.shadowColor = "rgba(0,0,0,0.6)", t.shadowBlur = 30, t.shadowOffsetY = 8, K(n, r, i, s, 8), t.fillStyle = "#1e2024", t.fill(), t.restore(), K(n, r, i, s, 8); const e = t.createLinearGradient(n, r, n, r + s); e.addColorStop(0, "#222528"), e.addColorStop(.5, "#1c1f22"), e.addColorStop(1, "#161a1d"), t.fillStyle = e, t.fill(), t.strokeStyle = "#0e1012", t.lineWidth = 3, t.stroke(), K(n + 3, r + 3, i - 6, s - 6, 6), t.strokeStyle = "rgba(60, 70, 80, 0.15)", t.lineWidth = 1, t.stroke(), t.fillStyle = "#111316", K(n + 8, r + 40, 22, s - 80, 4), t.fill(), t.strokeStyle = "#0a0b0d", t.lineWidth = 1, t.stroke(), t.fillStyle = "#111316", K(n + i - 8 - 22, r + 40, 22, s - 80, 4), t.fill(), t.strokeStyle = "#0a0b0d", t.lineWidth = 1, t.stroke(), t.save(), t.font = '600 10px "Share Tech Mono", monospace', t.textAlign = "center", t.fillStyle = "#4a3a00"; const o = n + i / 2, l = r + s - 18; t.fillStyle = "rgba(255, 200, 0, 0.12)", t.fillRect(n + 40, l - 8, i - 80, 16), t.fillStyle = "#8a7a30", t.fillText("⚡ DANGER — HIGH VOLTAGE ⚡", o, l + 3), t.restore() }(), "removed" !== W) { t.save(), t.globalAlpha = .3; const e = ["red", "blue", "yellow", "pink", "orange", "green"], o = 5 + Math.floor(.01 * Math.random()), l = s / (o + 1); for (let a = 0; a < o; a++) { const o = G[e[a % e.length]], s = r + l * (a + 1); t.strokeStyle = o.fill, t.lineWidth = 5, t.beginPath(), t.moveTo(n + 30, s), t.bezierCurveTo(n + .3 * i, s + 15, n + .6 * i, s - 10, n + i - 30, s + (a % 2 == 0 ? -20 : 20)), t.stroke() } t.restore() } if (function () { if ("removed" === W) return; const e = B, o = R; t.save(), "removing" === W && (t.globalAlpha = L), t.save(), t.shadowColor = "rgba(0,0,0,0.7)", t.shadowBlur = 20 + .3 * Math.abs(e) + .3 * Math.abs(o), t.shadowOffsetX = .2 * e, t.shadowOffsetY = 6 + .2 * o, K(n + e, r + o, i, s, 8), t.fillStyle = "#2a2d30", t.fill(), t.restore(), K(n + e, r + o, i, s, 8); const l = t.createLinearGradient(n, r + o, n, r + s + o); l.addColorStop(0, "#3e4248"), l.addColorStop(.3, "#363a3f"), l.addColorStop(.7, "#2e3136"), l.addColorStop(1, "#282b30"), t.fillStyle = l, t.fill(), t.strokeStyle = "#1a1c1f", t.lineWidth = 3, t.stroke(), K(n + e + 2, r + o + 2, i - 4, s - 4, 7), t.strokeStyle = "rgba(90, 100, 110, 0.2)", t.lineWidth = 1, t.stroke(), t.save(), t.globalAlpha = .05, t.strokeStyle = "#fff", t.lineWidth = .5; for (let l = 0; l < 20; l++) { const l = n + e + Math.random() * i, a = r + o + Math.random() * s; t.beginPath(), t.moveTo(l, a), t.lineTo(l + 60 * (Math.random() - .5), a + 20 * (Math.random() - .5)), t.stroke() } t.restore(), t.save(), t.font = '700 20px "Rajdhani", sans-serif', t.textAlign = "center", t.textBaseline = "middle", t.fillStyle = "#6a6e74", t.letterSpacing = "4px", t.fillText("ELECTRICAL", n + e + i / 2, r + o + s / 2 - 14), t.font = '400 12px "Share Tech Mono", monospace', t.fillStyle = "#4a4e54", t.fillText("PANEL ACCESS — AUTHORIZED ONLY", n + e + i / 2, r + o + s / 2 + 14), t.restore(), t.save(), t.beginPath(), t.rect(n + e + 20, r + o + s - 35, i - 40, 18), t.clip(), t.fillStyle = "rgba(255, 180, 0, 0.15)"; for (let l = n + e - i; l < n + e + 2 * i; l += 28)t.beginPath(), t.moveTo(l, r + o + s - 35), t.lineTo(l + 14, r + o + s - 35), t.lineTo(l + 14 - 18, r + o + s - 17), t.lineTo(l - 18, r + o + s - 17), t.fill(); t.restore(), "bolted" !== W && "unbolted" !== W || (A.forEach((l, a) => { l.unscrewed || function (e, o, l, a) { const n = 14, r = l.unscrewProgress, i = 4 * r; t.save(), t.translate(e, o - i), t.save(), t.translate(0, i), t.fillStyle = `rgba(0,0,0,${.4 - .2 * r})`, t.beginPath(), t.ellipse(0, 2, 16 + 3 * r, 4.2 + 2 * r, 0, 0, 2 * Math.PI), t.fill(), t.restore(); const s = t.createRadialGradient(-4.2, -4.2, 0, 0, 0, n); a ? (s.addColorStop(0, "#8a8a8a"), s.addColorStop(.5, "#6a6a6a"), s.addColorStop(1, "#4a4a4a")) : (s.addColorStop(0, "#7a7a7a"), s.addColorStop(.5, "#5a5a5a"), s.addColorStop(1, "#3a3a3a")), t.fillStyle = s, t.beginPath(), t.arc(0, 0, n, 0, 2 * Math.PI), t.fill(), t.strokeStyle = a ? "#555" : "#2a2a2a", t.lineWidth = 2, t.stroke(), t.save(), t.rotate(l.rotation), t.strokeStyle = "#222", t.lineWidth = 3, t.lineCap = "round"; const c = 9.1; t.beginPath(), t.moveTo(-9.1, 0), t.lineTo(c, 0), t.stroke(), t.beginPath(), t.moveTo(0, -9.1), t.lineTo(0, c), t.stroke(), t.restore(), t.save(), t.globalAlpha = .15, t.fillStyle = "#fff", t.beginPath(), t.arc(-3.5, -3.5, .4 * n, 0, 2 * Math.PI), t.fill(), t.restore(), a && (t.save(), t.strokeStyle = "rgba(120, 200, 255, 0.3)", t.lineWidth = 3, t.beginPath(), t.arc(0, 0, 18, 0, 2 * Math.PI), t.stroke(), t.restore()), t.restore() }(l.x + e, l.y + o, l, a === E) }), A.forEach(l => { l.unscrewed && function (e, o) { t.save(), t.fillStyle = "#0a0c0e", t.beginPath(), t.arc(e, o, 8, 0, 2 * Math.PI), t.fill(), t.strokeStyle = "#1a1c20", t.lineWidth = 1.5, t.stroke(); const l = t.createRadialGradient(e, o, 0, e, o, 8); l.addColorStop(0, "rgba(0,0,0,0.6)"), l.addColorStop(1, "rgba(0,0,0,0)"), t.fillStyle = l, t.beginPath(), t.arc(e, o, 10, 0, 2 * Math.PI), t.fill(), t.restore() }(l.x + e, l.y + o) })), t.restore() }(), J(), t.restore(), "bolted" === W) { const e = A.filter(e => e.unscrewed).length; t.save(), t.font = '400 14px "Share Tech Mono", monospace', t.textAlign = "center", t.fillStyle = "#6a8a9a", t.fillText(0 === e ? "Tap bolts to unscrew them" : `Bolts removed: ${e}/4`, o / 2, r + s + 36), t.restore() } else "unbolted" === W && (t.save(), t.font = '400 14px "Share Tech Mono", monospace', t.textAlign = "center", t.fillStyle = "#8aaa6a", t.fillText("Drag the cover to remove it", o / 2, r + s + 36), t.restore()) } function _(e) { return e.touches && e.touches.length > 0 ? { x: e.touches[0].clientX, y: e.touches[0].clientY } : e.changedTouches && e.changedTouches.length > 0 ? { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY } : { x: e.clientX, y: e.clientY } } function ee(e) { e.preventDefault(); const t = _(e); if ("cover" !== c) { if ("complete" !== c) { if ("blackscreen" === c) return c = "cover", W = "bolted", B = 0, R = 0, Y = !1, L = 1, O = 0, F = !1, E = null, d = [], y = [], m = [], M = 0, x = -80, T = -80, b = 0, w = 0, void q(); if ("playing" === c) for (let e = 0; e < d.length; e++) { const o = d[e]; if (o.connected) continue; const l = t.x - o.leftX, a = t.y - o.leftY; if (Math.abs(l) < 40 && Math.abs(a) < 24) { h = e, g = t.x, u = t.y; break } } } } else if ("bolted" === W) for (let e = 0; e < A.length; e++) { const o = A[e]; if (o.unscrewed) continue; const l = t.x - (o.x + B), a = t.y - (o.y + R); if (Math.sqrt(l * l + a * a) < 24) return void (E = e) } else "unbolted" === W && t.x >= n + B && t.x <= n + i + B && t.y >= r + R && t.y <= r + s + R && (Y = !0, I = { x: t.x - B, y: t.y - R }) } function te(e) { e.preventDefault(); const t = _(e); if ("cover" === c && Y) return B = t.x - I.x, R = t.y - I.y, void (Math.sqrt(B * B + R * R) > 100 && (Y = !1, W = "removing", N(5))); null !== h && (g = t.x, u = t.y) } function oe(e) { e.preventDefault(); const t = _(e); if ("cover" === c) return void (Y && (Math.sqrt(B * B + R * R) > 60 ? (W = "removing", N(5)) : (B = 0, R = 0), Y = !1)); if ("complete" === c) return void setTimeout(() => { "complete" === c && (c = "blackscreen", w = 0, C = performance.now()) }, 200); if (null === h) return; const o = d[h], l = d.length, a = s / (l + 1); let f = !1; P.forEach((e, l) => { const h = r + a * (l + 1), g = n + i - 30, u = t.x - g, y = t.y - h, m = e === o.color && Math.abs(o.rightY - h) < 5, p = d.some(e => e.connected && Math.abs(e.rightY - h) < 5); if (Math.sqrt(u * u + y * y) < 30 && m && !p && !f && (o.connected = !0, o.connectAnim = 1, f = !0, H(g, h), N(2), d.every(e => e.connected))) { c = "complete", k = "#00ff66", M = .3, v = performance.now(); for (let e = 0; e < 5; e++)setTimeout(() => { H(n + Math.random() * i, r + Math.random() * s) }, 100 * e); setTimeout(() => { c = "blackscreen", w = 0, C = performance.now() }, 2e3) } }), f || (o.snapBackT = 1, o.snapBackFrom = { x: g, y: u }), h = null } P = X.slice(), e.addEventListener("mousedown", ee), e.addEventListener("mousemove", te), e.addEventListener("mouseup", oe), e.addEventListener("touchstart", ee, { passive: !1 }), e.addEventListener("touchmove", te, { passive: !1 }), e.addEventListener("touchend", oe, { passive: !1 }), window.addEventListener("resize", D), D(), c = "cover", requestAnimationFrame(function e(a) { (function () { if (y = y.filter(e => (e.life -= .04, e.life > 0)), m = m.filter(e => (e.x += e.vx, e.y += e.vy, e.vy += .1, e.life -= .03, e.life > 0)), b > .1 ? (p = (Math.random() - .5) * b, S = (Math.random() - .5) * b, b *= .9) : (p = 0, S = 0, b = 0), M > 0 && (M -= .03, M < 0 && (M = 0)), "cover" === c && null !== E) { const e = A[E]; e.unscrewed || (e.rotation += .15, e.unscrewProgress += .012, e.wobble = 2 * Math.sin(3 * e.rotation), Math.random() < .15 && function (e, t) { for (let o = 0; o < 4; o++) { const o = Math.random() * Math.PI * 2, l = .5 + 2 * Math.random(); m.push({ x: e, y: t, vx: Math.cos(o) * l, vy: Math.sin(o) * l - 1, life: 1, size: 1 + 1.5 * Math.random(), isMetal: !0 }) } }(e.x + B, e.y + R), e.unscrewProgress >= 1 && (e.unscrewed = !0, e.unscrewProgress = 1, E = null, N(3), A.every(e => e.unscrewed) && (F = !0, W = "unbolted"))) } "removing" === W && (O += .02, L = Math.max(0, 1 - O), R += 3, B += B > 0 ? 2 : -2, L <= 0 && (W = "removed", function () { let e; if (f = "standard", c = "playing", M = 0, x = -80, T = -80, b = 0, y = [], m = [], Math.random() < .25) { f = "seven"; const t = z.slice(), o = t[Math.floor(Math.random() * t.length)]; e = $(t.concat(o)).slice(0, 7) } else e = X.slice(); const t = [], o = []; e.forEach(e => { -1 === t.indexOf(e) ? t.push(e) : o.push(e) }), t.sort((e, t) => z.indexOf(e) - z.indexOf(t)); const l = t.concat(o), a = $(e), h = e.length, g = s / (h + 1), u = n + 30, p = n + i - 30, S = {}; l.forEach((e, t) => { S[e] || (S[e] = []), S[e].push(t) }); const v = {}; d = []; for (let e = 0; e < h; e++) { const t = a[e]; v[t] || (v[t] = 0); const o = S[t][v[t]]; v[t]++, d.push({ color: t, leftY: r + g * (e + 1), rightY: r + g * (o + 1), leftX: u, rightX: p, connected: !1, connectAnim: 0, snapBackT: 0, snapBackFrom: null }) } P = l }())), d.forEach(e => { e.snapBackT > 0 && (e.snapBackT -= .08, e.snapBackT < 0 && (e.snapBackT = 0)) }), d.forEach(e => { e.connectAnim > 0 && (e.connectAnim -= .02, e.connectAnim < 0 && (e.connectAnim = 0)) }) })(), t.clearRect(0, 0, o, l), "cover" === c ? Q() : "blackscreen" === c ? function (e) { if (w < 1 && (w += .02, w > 1 && (w = 1)), t.fillStyle = `rgba(0, 0, 0, ${w})`, t.fillRect(0, 0, o, l), w >= 1) { const a = (e - C) / 1e3, n = Math.min(1, Math.max(0, a - .5)); t.save(), t.globalAlpha = n, t.font = '700 28px "Rajdhani", sans-serif', t.textAlign = "center", t.textBaseline = "middle", t.fillStyle = "#00ff66", t.fillText("TASK COMPLETE", o / 2, l / 2 - 20), t.font = '400 14px "Share Tech Mono", monospace', t.fillStyle = "#3a5a4a", t.fillText("Wiring fixed successfully.", o / 2, l / 2 + 20), t.restore(), t.save(), t.globalAlpha = .5 * n, t.font = '400 12px "Share Tech Mono", monospace', t.textAlign = "center", t.fillStyle = "#2a3a3a", t.fillText("Click anywhere to play again", o / 2, l / 2 + 60), t.restore() } }(a) : function (e) { V(), t.save(), t.translate(p, S), function () { const e = d.every(e => e.connected); t.save(), t.shadowColor = "rgba(0,0,0,0.6)", t.shadowBlur = 30, t.shadowOffsetY = 8, K(n, r, i, s, 8), t.fillStyle = "#2a2d30", t.fill(), t.restore(), K(n, r, i, s, 8); const o = t.createLinearGradient(n, r, n, r + s); o.addColorStop(0, e ? "#3a3d42" : "#32353a"), o.addColorStop(.5, e ? "#2e3136" : "#282b30"), o.addColorStop(1, e ? "#262a2e" : "#1e2126"), t.fillStyle = o, t.fill(), t.strokeStyle = "#1a1c1f", t.lineWidth = 3, t.stroke(), K(n + 2, r + 2, i - 4, s - 4, 7), t.strokeStyle = "rgba(80, 90, 100, 0.2)", t.lineWidth = 1, t.stroke(), t.save(), t.globalAlpha = .04, t.strokeStyle = "#fff", t.lineWidth = .5; for (let e = 0; e < 15; e++) { const e = n + Math.random() * i, o = r + Math.random() * s; t.beginPath(), t.moveTo(e, o), t.lineTo(e + 60 * (Math.random() - .5), o + 20 * (Math.random() - .5)), t.stroke() } t.restore(); const l = 16; if (U(n + l, r + l, 4), U(n + i - l, r + l, 4), U(n + l, r + s - l, 4), U(n + i - l, r + s - l, 4), e) { const e = t.createRadialGradient(n + i / 2, r, 10, n + i / 2, r + .3 * s, .6 * i); e.addColorStop(0, "rgba(200, 220, 240, 0.08)"), e.addColorStop(1, "rgba(200, 220, 240, 0)"), t.fillStyle = e, t.fillRect(n, r, i, s) } t.fillStyle = "#111316", K(n + 8, r + 40, 22, s - 80, 4), t.fill(), t.strokeStyle = "#0a0b0d", t.lineWidth = 1, t.stroke(), t.fillStyle = "#111316", K(n + i - 8 - 22, r + 40, 22, s - 80, 4), t.fill(), t.strokeStyle = "#0a0b0d", t.lineWidth = 1, t.stroke() }(); const a = d.length, f = s / (a + 1); if (d.forEach(t => { if (t.connected) { const o = .1 * Math.sin(.003 * e + d.indexOf(t)) + .9; Z(t.leftX, t.leftY, t.rightX, t.rightY, t.color, o, 8) } }), null !== h) { const e = d[h]; Z(e.leftX, e.leftY, g, u, e.color, .85, 8) } if (d.forEach((e, o) => { if (!e.connected) { const l = h === o; !function (e, o, l, a, n) { const r = G[l]; t.save(), n && (t.shadowColor = r.fill, t.shadowBlur = 12); const i = e, s = t.createLinearGradient(i, o - 7, i, o + 7); s.addColorStop(0, r.highlight), s.addColorStop(.4, r.fill), s.addColorStop(1, r.stroke), t.fillStyle = s, K(i, o - 7, 35, 14, 3), t.fill(); const c = e + 35; t.strokeStyle = "#d4a55a", t.lineWidth = 1.2; for (let e = 0; e < 5; e++) { const l = o - 4 + 2 * e; t.beginPath(), t.moveTo(c, l), t.lineTo(c + 1 * (4 + 6 * Math.random()), l + 3 * (Math.random() - .5)), t.stroke() } t.restore() }(e.leftX, e.leftY, e.color, 0, l) } }), P.forEach((e, o) => { const l = r + f * (o + 1), a = n + i - 30, s = d.some(t => t.color === e && t.connected && Math.abs(t.rightY - l) < 5); !function (e, o, l, a) { const n = G[l]; t.fillStyle = a ? n.fill : "#1a1c20", K(e - 14, o - 8, 28, 16, 3), t.fill(), t.strokeStyle = n.fill, t.lineWidth = 2, t.stroke(); const r = e + 14 + 10; a ? (t.save(), t.shadowColor = "#00ff66", t.shadowBlur = 8, t.fillStyle = "#00ff66", t.beginPath(), t.arc(r, o, 4, 0, 2 * Math.PI), t.fill(), t.restore()) : (t.fillStyle = "#2a2a2a", t.beginPath(), t.arc(r, o, 4, 0, 2 * Math.PI), t.fill(), t.strokeStyle = "#444", t.lineWidth = .5, t.stroke()) }(a, l, e, s) }), J(), t.restore(), M > 0 && (t.save(), t.globalAlpha = M, t.fillStyle = k, t.fillRect(0, 0, o, l), t.restore()), "complete" === c) { T = r + s / 2 - 30, x += .1 * (T - x), t.save(), t.globalAlpha = Math.min(1, (x - (r - 60)) / 60); const e = .7 * i, l = 50, a = (o - e) / 2; t.shadowColor = "rgba(0, 255, 100, 0.4)", t.shadowBlur = 20, K(a, x, e, l, 6), t.fillStyle = "rgba(0, 40, 20, 0.92)", t.fill(), t.strokeStyle = "#00ff66", t.lineWidth = 2, t.stroke(), t.font = '700 22px "Rajdhani", sans-serif', t.textAlign = "center", t.textBaseline = "middle", t.fillStyle = "#00ff66", t.fillText("TASK COMPLETE", o / 2, x + l / 2), t.restore(), t.save(), t.font = '400 13px "Share Tech Mono", monospace', t.textAlign = "center", t.fillStyle = "#5a7a6a", t.fillText("Click anywhere to play again", o / 2, x + l + 28), t.restore() } }(a), requestAnimationFrame(e) }) }();    
+(function() {
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    // ── State ──
+    let W, H, dpr;
+    let gameState = 'cover'; // cover, unscrewing, playing, complete, failed, blackscreen
+    let gameMode = 'standard';
+    let panelX, panelY, panelW, panelH;
+    let wires = [];
+    let dragging = null;
+    let dragX = 0, dragY = 0;
+    let sparks = [];
+    let particles = [];
+    let shakeX = 0, shakeY = 0;
+    let shakeIntensity = 0;
+    let timer = 15;
+    let timerStart = 0;
+    let completionTime = 0;
+    let flashAlpha = 0;
+    let flashColor = '#00ff00';
+    let bannerY = -80;
+    let bannerTarget = -80;
+    let blackScreenAlpha = 0;
+    let blackScreenStartTime = 0;
+    let gameCompleted = false;
+    let currentRightOrder = [];
+
+    // ── Cover/bolt state ──
+    let bolts = [];
+    let activeBolt = null; // index of bolt being unscrewed
+    let coverState = 'bolted'; // bolted, unbolted, removing, removed
+    let coverOffsetX = 0;
+    let coverOffsetY = 0;
+    let coverDragging = false;
+    let coverDragStart = null;
+    let coverAlpha = 1;
+    let coverRemoveAnim = 0;
+    let allBoltsRemoved = false;
+
+    const WIRE_COLORS = {
+        red:     { fill: '#FF1744', stroke: '#cc1036', highlight: '#ff5c7a', name: 'Red' },
+        blue:    { fill: '#2979FF', stroke: '#1a5ecc', highlight: '#6da3ff', name: 'Blue' },
+        yellow:  { fill: '#FFD600', stroke: '#ccab00', highlight: '#ffe44d', name: 'Yellow' },
+        pink:    { fill: '#FF4081', stroke: '#cc3367', highlight: '#ff79a8', name: 'Pink' },
+        orange:  { fill: '#FF6D00', stroke: '#cc5700', highlight: '#ff9a4d', name: 'Orange' },
+        green:   { fill: '#00E676', stroke: '#00b85e', highlight: '#4dff9e', name: 'Green' }
+    };
+
+    const STANDARD_COLORS = ['red', 'blue', 'yellow', 'pink'];
+    const ALL_COLORS = ['red', 'blue', 'yellow', 'pink', 'orange', 'green'];
+
+    // Initialize after constants are declared
+    currentRightOrder = STANDARD_COLORS.slice();
+
+    // ── Resize ──
+    function resize() {
+        dpr = window.devicePixelRatio || 1;
+        W = window.innerWidth;
+        H = window.innerHeight;
+        canvas.width = W * dpr;
+        canvas.height = H * dpr;
+        canvas.style.width = W + 'px';
+        canvas.style.height = H + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        computePanel();
+        initBolts();
+    }
+
+    function computePanel() {
+        const maxW = Math.min(W * 0.92, 600);
+        const maxH = Math.min(H * 0.78, 500);
+        panelW = maxW;
+        panelH = maxH;
+        panelX = (W - panelW) / 2;
+        panelY = (H - panelH) / 2 - 10;
+    }
+
+    function initBolts() {
+        const pad = 20;
+        const boltR = 14;
+        bolts = [
+            { x: panelX + pad + boltR, y: panelY + pad + boltR, rotation: 0, unscrewed: false, unscrewProgress: 0, wobble: 0 },
+            { x: panelX + panelW - pad - boltR, y: panelY + pad + boltR, rotation: 0, unscrewed: false, unscrewProgress: 0, wobble: 0 },
+            { x: panelX + pad + boltR, y: panelY + panelH - pad - boltR, rotation: 0, unscrewed: false, unscrewProgress: 0, wobble: 0 },
+            { x: panelX + panelW - pad - boltR, y: panelY + panelH - pad - boltR, rotation: 0, unscrewed: false, unscrewProgress: 0, wobble: 0 }
+        ];
+    }
+
+    // ── Shuffle ──
+    function shuffle(arr) {
+        const a = arr.slice();
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+    }
+
+    // ── Init game (wires) ──
+    function initGame() {
+        gameMode = 'standard';
+        gameState = 'playing';
+        flashAlpha = 0;
+        bannerY = -80;
+        bannerTarget = -80;
+        shakeIntensity = 0;
+        sparks = [];
+        particles = [];
+
+        // ~25% chance to get 7 wires instead of 4
+        let colors;
+        if (Math.random() < 0.25) {
+            // 7-wire mode: pick 7 randomized colors from all 6 (one color appears twice)
+            gameMode = 'seven';
+            const pool = ALL_COLORS.slice();
+            const extra = pool[Math.floor(Math.random() * pool.length)];
+            colors = shuffle(pool.concat(extra)).slice(0, 7);
+        } else {
+            colors = STANDARD_COLORS.slice();
+        }
+
+        // Build right-side order: unique colors in a fixed canonical order, duplicates appended at end
+        const seen = [];
+        const dupes = [];
+        colors.forEach(c => {
+            if (seen.indexOf(c) === -1) seen.push(c);
+            else dupes.push(c);
+        });
+        // canonical order based on ALL_COLORS index
+        seen.sort((a, b) => ALL_COLORS.indexOf(a) - ALL_COLORS.indexOf(b));
+        const rightOrder = seen.concat(dupes);
+
+        const shuffledLeft = shuffle(colors);
+
+        const wireCount = colors.length;
+        const spacing = panelH / (wireCount + 1);
+        const leftX = panelX + 30;
+        const rightX = panelX + panelW - 30;
+
+        // Track which right slots have been assigned (for duplicate colors)
+        const rightAssigned = {};
+        rightOrder.forEach((c, i) => {
+            if (!rightAssigned[c]) rightAssigned[c] = [];
+            rightAssigned[c].push(i);
+        });
+        const rightUsed = {};
+
+        wires = [];
+        for (let i = 0; i < wireCount; i++) {
+            const color = shuffledLeft[i];
+            if (!rightUsed[color]) rightUsed[color] = 0;
+            const slotIdx = rightAssigned[color][rightUsed[color]];
+            rightUsed[color]++;
+            wires.push({
+                color: color,
+                leftY: panelY + spacing * (i + 1),
+                rightY: panelY + spacing * (slotIdx + 1),
+                leftX: leftX,
+                rightX: rightX,
+                connected: false,
+                connectAnim: 0,
+                snapBackT: 0,
+                snapBackFrom: null
+            });
+        }
+
+        // Store rightOrder for socket drawing
+        currentRightOrder = rightOrder;
+    }
+
+    // ── Reset everything for a new game ──
+    function resetAll() {
+        gameState = 'cover';
+        coverState = 'bolted';
+        coverOffsetX = 0;
+        coverOffsetY = 0;
+        coverDragging = false;
+        coverAlpha = 1;
+        coverRemoveAnim = 0;
+        allBoltsRemoved = false;
+        activeBolt = null;
+        wires = [];
+        sparks = [];
+        particles = [];
+        flashAlpha = 0;
+        bannerY = -80;
+        bannerTarget = -80;
+        shakeIntensity = 0;
+        blackScreenAlpha = 0;
+        initBolts();
+    }
+
+    // ── Spark system ──
+    function addSpark(x, y) {
+        for (let i = 0; i < 3; i++) {
+            sparks.push({
+                x, y,
+                life: 1,
+                segments: generateLightning(x, y, 20 + Math.random() * 15),
+            });
+        }
+        sparks.push({ x, y, life: 1, isBloom: true });
+        for (let i = 0; i < 12; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const speed = 1 + Math.random() * 3;
+            particles.push({
+                x, y,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                life: 1,
+                size: 1 + Math.random() * 2
+            });
+        }
+    }
+
+    function addBoltSpark(x, y) {
+        for (let i = 0; i < 4; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const speed = 0.5 + Math.random() * 2;
+            particles.push({
+                x, y,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed - 1,
+                life: 1,
+                size: 1 + Math.random() * 1.5,
+                isMetal: true
+            });
+        }
+    }
+
+    function generateLightning(x, y, length) {
+        const segs = [];
+        let cx = x, cy = y;
+        const angle = Math.random() * Math.PI * 2;
+        const steps = 4 + Math.floor(Math.random() * 3);
+        for (let i = 0; i < steps; i++) {
+            const nx = cx + Math.cos(angle + (Math.random() - 0.5) * 2) * (length / steps);
+            const ny = cy + Math.sin(angle + (Math.random() - 0.5) * 2) * (length / steps);
+            segs.push({ x1: cx, y1: cy, x2: nx, y2: ny });
+            cx = nx; cy = ny;
+        }
+        return segs;
+    }
+
+    function triggerShake(intensity) {
+        shakeIntensity = Math.max(shakeIntensity, intensity);
+    }
+
+    // ── Drawing helpers ──
+    function drawRoundedRect(x, y, w, h, r) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.lineTo(x + w - r, y);
+        ctx.arcTo(x + w, y, x + w, y + r, r);
+        ctx.lineTo(x + w, y + h - r);
+        ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+        ctx.lineTo(x + r, y + h);
+        ctx.arcTo(x, y + h, x, y + h - r, r);
+        ctx.lineTo(x, y + r);
+        ctx.arcTo(x, y, x + r, y, r);
+        ctx.closePath();
+    }
+
+    function drawRivet(x, y, r) {
+        const grad = ctx.createRadialGradient(x - r * 0.3, y - r * 0.3, 0, x, y, r);
+        grad.addColorStop(0, '#6a6a6a');
+        grad.addColorStop(0.5, '#4a4a4a');
+        grad.addColorStop(1, '#2a2a2a');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#222';
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+    }
+
+    // ── Draw background ──
+    function drawBackground() {
+        const grad = ctx.createRadialGradient(W / 2, H / 2, 50, W / 2, H / 2, Math.max(W, H) * 0.7);
+        grad.addColorStop(0, '#1a2a30');
+        grad.addColorStop(0.5, '#0e1a1f');
+        grad.addColorStop(1, '#060a0d');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, W, H);
+
+        ctx.strokeStyle = 'rgba(30, 60, 70, 0.15)';
+        ctx.lineWidth = 1;
+        for (let i = 0; i < W; i += 40) {
+            ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, H); ctx.stroke();
+        }
+        for (let i = 0; i < H; i += 40) {
+            ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(W, i); ctx.stroke();
+        }
+    }
+
+    // ── Draw panel (inner, visible after cover removed) ──
+    function drawPanelInner() {
+        // Panel shadow
+        ctx.save();
+        ctx.shadowColor = 'rgba(0,0,0,0.6)';
+        ctx.shadowBlur = 30;
+        ctx.shadowOffsetY = 8;
+        drawRoundedRect(panelX, panelY, panelW, panelH, 8);
+        ctx.fillStyle = '#1e2024';
+        ctx.fill();
+        ctx.restore();
+
+        // Inner panel body (darker, like inside of electrical box)
+        drawRoundedRect(panelX, panelY, panelW, panelH, 8);
+        const panelGrad = ctx.createLinearGradient(panelX, panelY, panelX, panelY + panelH);
+        panelGrad.addColorStop(0, '#222528');
+        panelGrad.addColorStop(0.5, '#1c1f22');
+        panelGrad.addColorStop(1, '#161a1d');
+        ctx.fillStyle = panelGrad;
+        ctx.fill();
+        ctx.strokeStyle = '#0e1012';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        // Inner bevel
+        drawRoundedRect(panelX + 3, panelY + 3, panelW - 6, panelH - 6, 6);
+        ctx.strokeStyle = 'rgba(60, 70, 80, 0.15)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Conduit left
+        const conduitW = 22;
+        ctx.fillStyle = '#111316';
+        drawRoundedRect(panelX + 8, panelY + 40, conduitW, panelH - 80, 4);
+        ctx.fill();
+        ctx.strokeStyle = '#0a0b0d';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Conduit right
+        ctx.fillStyle = '#111316';
+        drawRoundedRect(panelX + panelW - 8 - conduitW, panelY + 40, conduitW, panelH - 80, 4);
+        ctx.fill();
+        ctx.strokeStyle = '#0a0b0d';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Warning label
+        ctx.save();
+        ctx.font = '600 10px "Share Tech Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#4a3a00';
+        const labelX = panelX + panelW / 2;
+        const labelY = panelY + panelH - 18;
+        // Yellow warning strip
+        ctx.fillStyle = 'rgba(255, 200, 0, 0.12)';
+        ctx.fillRect(panelX + 40, labelY - 8, panelW - 80, 16);
+        ctx.fillStyle = '#8a7a30';
+        ctx.fillText('⚡ DANGER — HIGH VOLTAGE ⚡', labelX, labelY + 3);
+        ctx.restore();
+    }
+
+    // ── Draw cover panel (the thing you unscrew and remove) ──
+    function drawCoverPanel(timestamp) {
+        if (coverState === 'removed') return;
+
+        const ox = coverOffsetX;
+        const oy = coverOffsetY;
+
+        ctx.save();
+
+        if (coverState === 'removing') {
+            ctx.globalAlpha = coverAlpha;
+        }
+
+        // Cover shadow
+        ctx.save();
+        ctx.shadowColor = 'rgba(0,0,0,0.7)';
+        ctx.shadowBlur = 20 + Math.abs(ox) * 0.3 + Math.abs(oy) * 0.3;
+        ctx.shadowOffsetX = ox * 0.2;
+        ctx.shadowOffsetY = 6 + oy * 0.2;
+        drawRoundedRect(panelX + ox, panelY + oy, panelW, panelH, 8);
+        ctx.fillStyle = '#2a2d30';
+        ctx.fill();
+        ctx.restore();
+
+        // Cover body
+        drawRoundedRect(panelX + ox, panelY + oy, panelW, panelH, 8);
+        const coverGrad = ctx.createLinearGradient(panelX, panelY + oy, panelX, panelY + panelH + oy);
+        coverGrad.addColorStop(0, '#3e4248');
+        coverGrad.addColorStop(0.3, '#363a3f');
+        coverGrad.addColorStop(0.7, '#2e3136');
+        coverGrad.addColorStop(1, '#282b30');
+        ctx.fillStyle = coverGrad;
+        ctx.fill();
+        ctx.strokeStyle = '#1a1c1f';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        // Bevel highlight
+        drawRoundedRect(panelX + ox + 2, panelY + oy + 2, panelW - 4, panelH - 4, 7);
+        ctx.strokeStyle = 'rgba(90, 100, 110, 0.2)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Scratches
+        ctx.save();
+        ctx.globalAlpha = 0.05;
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 0.5;
+        for (let i = 0; i < 20; i++) {
+            const sx = panelX + ox + Math.random() * panelW;
+            const sy = panelY + oy + Math.random() * panelH;
+            ctx.beginPath();
+            ctx.moveTo(sx, sy);
+            ctx.lineTo(sx + (Math.random() - 0.5) * 60, sy + (Math.random() - 0.5) * 20);
+            ctx.stroke();
+        }
+        ctx.restore();
+
+        // ELECTRICAL label on cover
+        ctx.save();
+        ctx.font = '700 20px "Rajdhani", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = '#6a6e74';
+        ctx.letterSpacing = '4px';
+        ctx.fillText('ELECTRICAL', panelX + ox + panelW / 2, panelY + oy + panelH / 2 - 14);
+
+        ctx.font = '400 12px "Share Tech Mono", monospace';
+        ctx.fillStyle = '#4a4e54';
+        ctx.fillText('PANEL ACCESS — AUTHORIZED ONLY', panelX + ox + panelW / 2, panelY + oy + panelH / 2 + 14);
+        ctx.restore();
+
+        // Diagonal caution stripes at bottom
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(panelX + ox + 20, panelY + oy + panelH - 35, panelW - 40, 18);
+        ctx.clip();
+        const stripeW = 14;
+        ctx.fillStyle = 'rgba(255, 180, 0, 0.15)';
+        for (let sx = panelX + ox - panelW; sx < panelX + ox + panelW * 2; sx += stripeW * 2) {
+            ctx.beginPath();
+            ctx.moveTo(sx, panelY + oy + panelH - 35);
+            ctx.lineTo(sx + stripeW, panelY + oy + panelH - 35);
+            ctx.lineTo(sx + stripeW - 18, panelY + oy + panelH - 17);
+            ctx.lineTo(sx - 18, panelY + oy + panelH - 17);
+            ctx.fill();
+        }
+        ctx.restore();
+
+        // Draw bolts
+        if (coverState === 'bolted' || coverState === 'unbolted') {
+            bolts.forEach((bolt, i) => {
+                if (bolt.unscrewed) return;
+                drawBolt(bolt.x + ox, bolt.y + oy, bolt, i === activeBolt, timestamp);
+            });
+
+            // Draw bolt holes for removed bolts
+            bolts.forEach((bolt) => {
+                if (!bolt.unscrewed) return;
+                drawBoltHole(bolt.x + ox, bolt.y + oy);
+            });
+        }
+
+        ctx.restore();
+    }
+
+    // ── Draw bolt ──
+    function drawBolt(x, y, bolt, active, timestamp) {
+        const r = 14;
+        const progress = bolt.unscrewProgress;
+
+        // Bolt raising effect
+        const raise = progress * 4;
+
+        ctx.save();
+        ctx.translate(x, y - raise);
+
+        // Bolt shadow (gets bigger as it raises)
+        ctx.save();
+        ctx.translate(0, raise);
+        ctx.fillStyle = `rgba(0,0,0,${0.4 - progress * 0.2})`;
+        ctx.beginPath();
+        ctx.ellipse(0, 2, r + 2 + progress * 3, r * 0.3 + progress * 2, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        // Bolt body
+        const bGrad = ctx.createRadialGradient(-r * 0.3, -r * 0.3, 0, 0, 0, r);
+        if (active) {
+            bGrad.addColorStop(0, '#8a8a8a');
+            bGrad.addColorStop(0.5, '#6a6a6a');
+            bGrad.addColorStop(1, '#4a4a4a');
+        } else {
+            bGrad.addColorStop(0, '#7a7a7a');
+            bGrad.addColorStop(0.5, '#5a5a5a');
+            bGrad.addColorStop(1, '#3a3a3a');
+        }
+        ctx.fillStyle = bGrad;
+        ctx.beginPath();
+        ctx.arc(0, 0, r, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Outer ring
+        ctx.strokeStyle = active ? '#555' : '#2a2a2a';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Cross/Phillips head slot
+        ctx.save();
+        ctx.rotate(bolt.rotation);
+        ctx.strokeStyle = '#222';
+        ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
+        const slotLen = r * 0.65;
+        ctx.beginPath();
+        ctx.moveTo(-slotLen, 0);
+        ctx.lineTo(slotLen, 0);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0, -slotLen);
+        ctx.lineTo(0, slotLen);
+        ctx.stroke();
+        ctx.restore();
+
+        // Highlight
+        ctx.save();
+        ctx.globalAlpha = 0.15;
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+        ctx.arc(-r * 0.25, -r * 0.25, r * 0.4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        // Active glow ring
+        if (active) {
+            ctx.save();
+            ctx.strokeStyle = 'rgba(120, 200, 255, 0.3)';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(0, 0, r + 4, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        ctx.restore();
+    }
+
+    // ── Draw bolt hole ──
+    function drawBoltHole(x, y) {
+        ctx.save();
+        const hr = 8;
+        ctx.fillStyle = '#0a0c0e';
+        ctx.beginPath();
+        ctx.arc(x, y, hr, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#1a1c20';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Inner shadow
+        const iGrad = ctx.createRadialGradient(x, y, 0, x, y, hr);
+        iGrad.addColorStop(0, 'rgba(0,0,0,0.6)');
+        iGrad.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = iGrad;
+        ctx.beginPath();
+        ctx.arc(x, y, hr + 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    }
+
+    // ── Draw panel for playing state ──
+    function drawPanel() {
+        const allConnected = wires.every(w => w.connected);
+
+        // Panel shadow
+        ctx.save();
+        ctx.shadowColor = 'rgba(0,0,0,0.6)';
+        ctx.shadowBlur = 30;
+        ctx.shadowOffsetY = 8;
+        drawRoundedRect(panelX, panelY, panelW, panelH, 8);
+        ctx.fillStyle = '#2a2d30';
+        ctx.fill();
+        ctx.restore();
+
+        // Panel body
+        drawRoundedRect(panelX, panelY, panelW, panelH, 8);
+        const panelGrad = ctx.createLinearGradient(panelX, panelY, panelX, panelY + panelH);
+        panelGrad.addColorStop(0, allConnected ? '#3a3d42' : '#32353a');
+        panelGrad.addColorStop(0.5, allConnected ? '#2e3136' : '#282b30');
+        panelGrad.addColorStop(1, allConnected ? '#262a2e' : '#1e2126');
+        ctx.fillStyle = panelGrad;
+        ctx.fill();
+        ctx.strokeStyle = '#1a1c1f';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        drawRoundedRect(panelX + 2, panelY + 2, panelW - 4, panelH - 4, 7);
+        ctx.strokeStyle = 'rgba(80, 90, 100, 0.2)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Scratches
+        ctx.save();
+        ctx.globalAlpha = 0.04;
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 0.5;
+        for (let i = 0; i < 15; i++) {
+            const sx = panelX + Math.random() * panelW;
+            const sy = panelY + Math.random() * panelH;
+            ctx.beginPath();
+            ctx.moveTo(sx, sy);
+            ctx.lineTo(sx + (Math.random() - 0.5) * 60, sy + (Math.random() - 0.5) * 20);
+            ctx.stroke();
+        }
+        ctx.restore();
+
+        // Rivets
+        const rivetR = 4;
+        const rivetPad = 16;
+        drawRivet(panelX + rivetPad, panelY + rivetPad, rivetR);
+        drawRivet(panelX + panelW - rivetPad, panelY + rivetPad, rivetR);
+        drawRivet(panelX + rivetPad, panelY + panelH - rivetPad, rivetR);
+        drawRivet(panelX + panelW - rivetPad, panelY + panelH - rivetPad, rivetR);
+
+        if (allConnected) {
+            const glowGrad = ctx.createRadialGradient(panelX + panelW / 2, panelY, 10, panelX + panelW / 2, panelY + panelH * 0.3, panelW * 0.6);
+            glowGrad.addColorStop(0, 'rgba(200, 220, 240, 0.08)');
+            glowGrad.addColorStop(1, 'rgba(200, 220, 240, 0)');
+            ctx.fillStyle = glowGrad;
+            ctx.fillRect(panelX, panelY, panelW, panelH);
+        }
+
+        // Left conduit slot
+        const conduitW = 22;
+        ctx.fillStyle = '#111316';
+        drawRoundedRect(panelX + 8, panelY + 40, conduitW, panelH - 80, 4);
+        ctx.fill();
+        ctx.strokeStyle = '#0a0b0d';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Right conduit slot
+        ctx.fillStyle = '#111316';
+        drawRoundedRect(panelX + panelW - 8 - conduitW, panelY + 40, conduitW, panelH - 80, 4);
+        ctx.fill();
+        ctx.strokeStyle = '#0a0b0d';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+    }
+
+    // ── Draw wire ──
+    function drawWire(fromX, fromY, toX, toY, color, alpha, thickness) {
+        const col = WIRE_COLORS[color];
+        const midX = (fromX + toX) / 2;
+        const sag = 20 + Math.abs(toY - fromY) * 0.15;
+
+        ctx.save();
+        ctx.globalAlpha = alpha || 1;
+
+        ctx.save();
+        ctx.shadowColor = 'rgba(0,0,0,0.4)';
+        ctx.shadowBlur = 6;
+        ctx.shadowOffsetY = 3;
+        ctx.strokeStyle = col.stroke;
+        ctx.lineWidth = thickness || 7;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(fromX, fromY);
+        ctx.bezierCurveTo(midX, fromY + sag, midX, toY + sag, toX, toY);
+        ctx.stroke();
+        ctx.restore();
+
+        ctx.strokeStyle = col.fill;
+        ctx.lineWidth = thickness || 7;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(fromX, fromY);
+        ctx.bezierCurveTo(midX, fromY + sag, midX, toY + sag, toX, toY);
+        ctx.stroke();
+
+        ctx.strokeStyle = col.highlight;
+        ctx.lineWidth = 2;
+        ctx.globalAlpha = (alpha || 1) * 0.5;
+        ctx.beginPath();
+        ctx.moveTo(fromX, fromY - 1.5);
+        ctx.bezierCurveTo(midX, fromY + sag - 2, midX, toY + sag - 2, toX, toY - 1.5);
+        ctx.stroke();
+
+        ctx.restore();
+    }
+
+    function drawWireEnd(x, y, color, isLeft, active) {
+        const col = WIRE_COLORS[color];
+        const endW = 35;
+        const endH = 14;
+        const dx = isLeft ? 1 : -1;
+
+        ctx.save();
+        if (active) {
+            ctx.shadowColor = col.fill;
+            ctx.shadowBlur = 12;
+        }
+
+        const insX = isLeft ? x : x - endW;
+        const grad = ctx.createLinearGradient(insX, y - endH / 2, insX, y + endH / 2);
+        grad.addColorStop(0, col.highlight);
+        grad.addColorStop(0.4, col.fill);
+        grad.addColorStop(1, col.stroke);
+        ctx.fillStyle = grad;
+        drawRoundedRect(insX, y - endH / 2, endW, endH, 3);
+        ctx.fill();
+
+        const tipX = isLeft ? x + endW : x - endW;
+        ctx.strokeStyle = '#d4a55a';
+        ctx.lineWidth = 1.2;
+        for (let i = 0; i < 5; i++) {
+            const fy = y - 4 + i * 2;
+            ctx.beginPath();
+            ctx.moveTo(tipX, fy);
+            ctx.lineTo(tipX + dx * (4 + Math.random() * 6), fy + (Math.random() - 0.5) * 3);
+            ctx.stroke();
+        }
+
+        ctx.restore();
+    }
+
+    function drawSocket(x, y, color, connected) {
+        const col = WIRE_COLORS[color];
+        const sw = 28;
+        const sh = 16;
+
+        ctx.fillStyle = connected ? col.fill : '#1a1c20';
+        drawRoundedRect(x - sw / 2, y - sh / 2, sw, sh, 3);
+        ctx.fill();
+        ctx.strokeStyle = col.fill;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        const ledX = x + sw / 2 + 10;
+        const ledR = 4;
+        if (connected) {
+            ctx.save();
+            ctx.shadowColor = '#00ff66';
+            ctx.shadowBlur = 8;
+            ctx.fillStyle = '#00ff66';
+            ctx.beginPath();
+            ctx.arc(ledX, y, ledR, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        } else {
+            ctx.fillStyle = '#2a2a2a';
+            ctx.beginPath();
+            ctx.arc(ledX, y, ledR, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#444';
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+        }
+    }
+
+    function drawSparks() {
+        sparks.forEach(s => {
+            if (s.isBloom) {
+                ctx.save();
+                const grad = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, 30 * s.life);
+                grad.addColorStop(0, `rgba(180, 220, 255, ${s.life * 0.8})`);
+                grad.addColorStop(0.5, `rgba(100, 170, 255, ${s.life * 0.3})`);
+                grad.addColorStop(1, 'rgba(100, 170, 255, 0)');
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, 30, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            } else {
+                ctx.save();
+                ctx.strokeStyle = `rgba(200, 230, 255, ${s.life})`;
+                ctx.lineWidth = 2 * s.life;
+                ctx.lineCap = 'round';
+                ctx.shadowColor = '#aaddff';
+                ctx.shadowBlur = 6;
+                s.segments.forEach(seg => {
+                    ctx.beginPath();
+                    ctx.moveTo(seg.x1, seg.y1);
+                    ctx.lineTo(seg.x2, seg.y2);
+                    ctx.stroke();
+                });
+                ctx.restore();
+            }
+        });
+
+        particles.forEach(p => {
+            ctx.save();
+            ctx.globalAlpha = p.life;
+            ctx.fillStyle = p.isMetal ? '#c0a060' : '#ddeeff';
+            ctx.shadowColor = p.isMetal ? '#aa8844' : '#aaddff';
+            ctx.shadowBlur = 4;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        });
+    }
+
+    // ── Draw cover phase ──
+    function drawCoverPhase(timestamp) {
+        drawBackground();
+
+        ctx.save();
+        ctx.translate(shakeX, shakeY);
+
+        // Draw the inner panel behind cover
+        drawPanelInner();
+
+        // Draw some teaser wires behind the cover (partially visible)
+        if (coverState !== 'removed') {
+            ctx.save();
+            ctx.globalAlpha = 0.3;
+            const teaserColors = ['red', 'blue', 'yellow', 'pink', 'orange', 'green'];
+            const teaserCount = 5 + Math.floor(Math.random() * 0.01); // use 5 for visual variety
+            const spacing = panelH / (teaserCount + 1);
+            for (let i = 0; i < teaserCount; i++) {
+                const col = WIRE_COLORS[teaserColors[i % teaserColors.length]];
+                const y = panelY + spacing * (i + 1);
+                ctx.strokeStyle = col.fill;
+                ctx.lineWidth = 5;
+                ctx.beginPath();
+                ctx.moveTo(panelX + 30, y);
+                ctx.bezierCurveTo(panelX + panelW * 0.3, y + 15, panelX + panelW * 0.6, y - 10, panelX + panelW - 30, y + (i % 2 === 0 ? -20 : 20));
+                ctx.stroke();
+            }
+            ctx.restore();
+        }
+
+        // Draw cover on top
+        drawCoverPanel(timestamp);
+
+        // Draw sparks/particles
+        drawSparks();
+
+        ctx.restore();
+
+        // 7-wire indicator badge on cover
+        if (coverState !== 'removed') {
+            // Small random spark on the cover to hint at something special
+        }
+
+        // Instructions
+        if (coverState === 'bolted') {
+            const removedCount = bolts.filter(b => b.unscrewed).length;
+            ctx.save();
+            ctx.font = '400 14px "Share Tech Mono", monospace';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#6a8a9a';
+            ctx.fillText(
+                removedCount === 0 ? 'Tap bolts to unscrew them' : `Bolts removed: ${removedCount}/4`,
+                W / 2, panelY + panelH + 36
+            );
+            ctx.restore();
+        } else if (coverState === 'unbolted') {
+            ctx.save();
+            ctx.font = '400 14px "Share Tech Mono", monospace';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#8aaa6a';
+            ctx.fillText('Drag the cover to remove it', W / 2, panelY + panelH + 36);
+            ctx.restore();
+        }
+    }
+
+    // ── Draw game (wiring phase) ──
+    function drawGame(timestamp) {
+        drawBackground();
+
+        ctx.save();
+        ctx.translate(shakeX, shakeY);
+
+        drawPanel();
+
+        const wireCount = wires.length;
+        const spacing = panelH / (wireCount + 1);
+
+        // Connected wires
+        wires.forEach(w => {
+            if (w.connected) {
+                const glow = Math.sin(timestamp * 0.003 + wires.indexOf(w)) * 0.1 + 0.9;
+                drawWire(w.leftX, w.leftY, w.rightX, w.rightY, w.color, glow, 8);
+            }
+        });
+
+        // Dragging wire
+        if (dragging !== null) {
+            const w = wires[dragging];
+            drawWire(w.leftX, w.leftY, dragX, dragY, w.color, 0.85, 8);
+        }
+
+        // Wire ends
+        wires.forEach((w, i) => {
+            if (!w.connected) {
+                const active = dragging === i;
+                drawWireEnd(w.leftX, w.leftY, w.color, true, active);
+            }
+        });
+
+        // Sockets
+        const rightOrder = currentRightOrder;
+        rightOrder.forEach((color, i) => {
+            const sy = panelY + spacing * (i + 1);
+            const sx = panelX + panelW - 30;
+            // For duplicate colors, check if the wire targeting this specific slot is connected
+            const connected = wires.some(w => w.color === color && w.connected && Math.abs(w.rightY - sy) < 5);
+            drawSocket(sx, sy, color, connected);
+        });
+
+        drawSparks();
+
+        ctx.restore();
+
+        // Flash overlay
+        if (flashAlpha > 0) {
+            ctx.save();
+            ctx.globalAlpha = flashAlpha;
+            ctx.fillStyle = flashColor;
+            ctx.fillRect(0, 0, W, H);
+            ctx.restore();
+        }
+
+        // Task complete banner
+        if (gameState === 'complete') {
+            bannerTarget = panelY + panelH / 2 - 30;
+            bannerY += (bannerTarget - bannerY) * 0.1;
+
+            ctx.save();
+            ctx.globalAlpha = Math.min(1, (bannerY - (panelY - 60)) / 60);
+            const bw = panelW * 0.7;
+            const bh = 50;
+            const bx = (W - bw) / 2;
+
+            ctx.shadowColor = 'rgba(0, 255, 100, 0.4)';
+            ctx.shadowBlur = 20;
+            drawRoundedRect(bx, bannerY, bw, bh, 6);
+            ctx.fillStyle = 'rgba(0, 40, 20, 0.92)';
+            ctx.fill();
+            ctx.strokeStyle = '#00ff66';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            ctx.font = '700 22px "Rajdhani", sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = '#00ff66';
+            ctx.fillText('TASK COMPLETE', W / 2, bannerY + bh / 2);
+            ctx.restore();
+
+            ctx.save();
+            ctx.font = '400 13px "Share Tech Mono", monospace';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#5a7a6a';
+            ctx.fillText('Click anywhere to play again', W / 2, bannerY + bh + 28);
+            ctx.restore();
+        }
+    }
+
+    // ── Update logic ──
+    function update(timestamp) {
+        sparks = sparks.filter(s => {
+            s.life -= 0.04;
+            return s.life > 0;
+        });
+
+        particles = particles.filter(p => {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += 0.1;
+            p.life -= 0.03;
+            return p.life > 0;
+        });
+
+        if (shakeIntensity > 0.1) {
+            shakeX = (Math.random() - 0.5) * shakeIntensity;
+            shakeY = (Math.random() - 0.5) * shakeIntensity;
+            shakeIntensity *= 0.9;
+        } else {
+            shakeX = 0;
+            shakeY = 0;
+            shakeIntensity = 0;
+        }
+
+        if (flashAlpha > 0) {
+            flashAlpha -= 0.03;
+            if (flashAlpha < 0) flashAlpha = 0;
+        }
+
+        // Bolt unscrewing animation
+        if (gameState === 'cover' && activeBolt !== null) {
+            const bolt = bolts[activeBolt];
+            if (!bolt.unscrewed) {
+                bolt.rotation += 0.15;
+                bolt.unscrewProgress += 0.012;
+                bolt.wobble = Math.sin(bolt.rotation * 3) * 2;
+
+                if (Math.random() < 0.15) {
+                    addBoltSpark(bolt.x + coverOffsetX, bolt.y + coverOffsetY);
+                }
+
+                if (bolt.unscrewProgress >= 1) {
+                    bolt.unscrewed = true;
+                    bolt.unscrewProgress = 1;
+                    activeBolt = null;
+                    triggerShake(3);
+
+                    // Check if all bolts removed
+                    if (bolts.every(b => b.unscrewed)) {
+                        allBoltsRemoved = true;
+                        coverState = 'unbolted';
+                    }
+                }
+            }
+        }
+
+        // Cover removal animation
+        if (coverState === 'removing') {
+            coverRemoveAnim += 0.02;
+            coverAlpha = Math.max(0, 1 - coverRemoveAnim);
+            coverOffsetY += 3;
+            coverOffsetX += (coverOffsetX > 0 ? 2 : -2);
+
+            if (coverAlpha <= 0) {
+                coverState = 'removed';
+                // Transition to wire game
+                initGame();
+            }
+        }
+
+        // Wire snap-back
+        wires.forEach(w => {
+            if (w.snapBackT > 0) {
+                w.snapBackT -= 0.08;
+                if (w.snapBackT < 0) w.snapBackT = 0;
+            }
+        });
+
+        wires.forEach(w => {
+            if (w.connectAnim > 0) {
+                w.connectAnim -= 0.02;
+                if (w.connectAnim < 0) w.connectAnim = 0;
+            }
+        });
+    }
+
+    // ── Draw black screen ──
+    function drawBlackScreen(timestamp) {
+        if (blackScreenAlpha < 1) {
+            blackScreenAlpha += 0.02;
+            if (blackScreenAlpha > 1) blackScreenAlpha = 1;
+        }
+
+        ctx.fillStyle = `rgba(0, 0, 0, ${blackScreenAlpha})`;
+        ctx.fillRect(0, 0, W, H);
+
+        if (blackScreenAlpha >= 1) {
+            const elapsed = (timestamp - blackScreenStartTime) / 1000;
+            const textAlpha = Math.min(1, Math.max(0, elapsed - 0.5));
+
+            ctx.save();
+            ctx.globalAlpha = textAlpha;
+            ctx.font = '700 28px "Rajdhani", sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = '#00ff66';
+            ctx.fillText('TASK COMPLETE', W / 2, H / 2 - 20);
+
+            ctx.font = '400 14px "Share Tech Mono", monospace';
+            ctx.fillStyle = '#3a5a4a';
+            ctx.fillText('Wiring fixed successfully.', W / 2, H / 2 + 20);
+            ctx.restore();
+
+            ctx.save();
+            ctx.globalAlpha = textAlpha * 0.5;
+            ctx.font = '400 12px "Share Tech Mono", monospace';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#2a3a3a';
+            ctx.fillText('Click anywhere to play again', W / 2, H / 2 + 60);
+            ctx.restore();
+        }
+    }
+
+    // ── Main loop ──
+    function loop(timestamp) {
+        update(timestamp);
+
+        ctx.clearRect(0, 0, W, H);
+
+        if (gameState === 'cover') {
+            drawCoverPhase(timestamp);
+        } else if (gameState === 'blackscreen') {
+            drawBlackScreen(timestamp);
+        } else {
+            drawGame(timestamp);
+        }
+
+        requestAnimationFrame(loop);
+    }
+
+    // ── Input handling ──
+    function getPos(e) {
+        if (e.touches && e.touches.length > 0) {
+            return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        }
+        if (e.changedTouches && e.changedTouches.length > 0) {
+            return { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
+        }
+        return { x: e.clientX, y: e.clientY };
+    }
+
+    function handleStart(e) {
+        e.preventDefault();
+        const pos = getPos(e);
+
+        if (gameState === 'cover') {
+            if (coverState === 'bolted') {
+                // Check if tapping a bolt
+                for (let i = 0; i < bolts.length; i++) {
+                    const bolt = bolts[i];
+                    if (bolt.unscrewed) continue;
+                    const dx = pos.x - (bolt.x + coverOffsetX);
+                    const dy = pos.y - (bolt.y + coverOffsetY);
+                    if (Math.sqrt(dx * dx + dy * dy) < 24) {
+                        activeBolt = i;
+                        return;
+                    }
+                }
+            } else if (coverState === 'unbolted') {
+                // Check if tapping the cover to drag it
+                if (pos.x >= panelX + coverOffsetX && pos.x <= panelX + panelW + coverOffsetX &&
+                    pos.y >= panelY + coverOffsetY && pos.y <= panelY + panelH + coverOffsetY) {
+                    coverDragging = true;
+                    coverDragStart = { x: pos.x - coverOffsetX, y: pos.y - coverOffsetY };
+                }
+            }
+            return;
+        }
+
+        if (gameState === 'complete') {
+            return;
+        }
+
+        if (gameState === 'blackscreen') {
+            resetAll();
+            return;
+        }
+
+        if (gameState === 'playing') {
+            // Check wire ends
+            for (let i = 0; i < wires.length; i++) {
+                const w = wires[i];
+                if (w.connected) continue;
+                const dx = pos.x - w.leftX;
+                const dy = pos.y - w.leftY;
+                if (Math.abs(dx) < 40 && Math.abs(dy) < 24) {
+                    dragging = i;
+                    dragX = pos.x;
+                    dragY = pos.y;
+                    break;
+                }
+            }
+        }
+    }
+
+    function handleMove(e) {
+        e.preventDefault();
+        const pos = getPos(e);
+
+        if (gameState === 'cover' && coverDragging) {
+            coverOffsetX = pos.x - coverDragStart.x;
+            coverOffsetY = pos.y - coverDragStart.y;
+
+            // If dragged far enough, trigger removal animation
+            const dist = Math.sqrt(coverOffsetX * coverOffsetX + coverOffsetY * coverOffsetY);
+            if (dist > 100) {
+                coverDragging = false;
+                coverState = 'removing';
+                triggerShake(5);
+            }
+            return;
+        }
+
+        if (dragging !== null) {
+            dragX = pos.x;
+            dragY = pos.y;
+        }
+    }
+
+    function handleEnd(e) {
+        e.preventDefault();
+        const pos = getPos(e);
+
+        if (gameState === 'cover') {
+            if (coverDragging) {
+                // Check if dragged far enough
+                const dist = Math.sqrt(coverOffsetX * coverOffsetX + coverOffsetY * coverOffsetY);
+                if (dist > 60) {
+                    coverState = 'removing';
+                    triggerShake(5);
+                } else {
+                    // Snap back
+                    coverOffsetX = 0;
+                    coverOffsetY = 0;
+                }
+                coverDragging = false;
+            }
+            // Stop bolt unscrewing on release (bolt continues via animation until done)
+            return;
+        }
+
+        if (gameState === 'complete') {
+            // After complete, clicking starts over
+            setTimeout(() => {
+                if (gameState === 'complete') {
+                    gameState = 'blackscreen';
+                    blackScreenAlpha = 0;
+                    blackScreenStartTime = performance.now();
+                }
+            }, 200);
+            return;
+        }
+
+        if (dragging === null) return;
+
+        const w = wires[dragging];
+        const wireCount = wires.length;
+        const spacing = panelH / (wireCount + 1);
+
+        let matched = false;
+        const rightOrder = currentRightOrder;
+        rightOrder.forEach((color, i) => {
+            const sy = panelY + spacing * (i + 1);
+            const sx = panelX + panelW - 30;
+            const dx = pos.x - sx;
+            const dy = pos.y - sy;
+            // Check color match AND that this is the correct slot for this wire
+            const isCorrectSlot = color === w.color && Math.abs(w.rightY - sy) < 5;
+            // Also check the slot isn't already taken
+            const slotTaken = wires.some(wire => wire.connected && Math.abs(wire.rightY - sy) < 5);
+            if (Math.sqrt(dx * dx + dy * dy) < 30 && isCorrectSlot && !slotTaken && !matched) {
+                w.connected = true;
+                w.connectAnim = 1;
+                matched = true;
+                addSpark(sx, sy);
+                triggerShake(2);
+
+                if (wires.every(wire => wire.connected)) {
+                    gameState = 'complete';
+                    flashColor = '#00ff66';
+                    flashAlpha = 0.3;
+                    completionTime = performance.now();
+
+                    for (let j = 0; j < 5; j++) {
+                        setTimeout(() => {
+                            addSpark(
+                                panelX + Math.random() * panelW,
+                                panelY + Math.random() * panelH
+                            );
+                        }, j * 100);
+                    }
+
+                    setTimeout(() => {
+                        gameState = 'blackscreen';
+                        blackScreenAlpha = 0;
+                        blackScreenStartTime = performance.now();
+                    }, 2000);
+                }
+            }
+        });
+
+        if (!matched) {
+            w.snapBackT = 1;
+            w.snapBackFrom = { x: dragX, y: dragY };
+        }
+
+        dragging = null;
+    }
+
+    // ── Event listeners ──
+    canvas.addEventListener('mousedown', handleStart);
+    canvas.addEventListener('mousemove', handleMove);
+    canvas.addEventListener('mouseup', handleEnd);
+    canvas.addEventListener('touchstart', handleStart, { passive: false });
+    canvas.addEventListener('touchmove', handleMove, { passive: false });
+    canvas.addEventListener('touchend', handleEnd, { passive: false });
+    window.addEventListener('resize', resize);
+
+    // ── Boot ──
+    resize();
+    gameState = 'cover';
+    requestAnimationFrame(loop);
+})();
